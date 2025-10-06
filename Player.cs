@@ -16,7 +16,7 @@ class Player : Actor
         {
             if (Inventory[i] != null)
             {
-                txt += $"[{i+1}] [{Inventory[i].Name}]\n";
+                txt += $"[{i + 1}] [{Inventory[i].Name}]\n";
             }
         }
         if (txt != "" || txt != null)
@@ -36,7 +36,7 @@ class Player : Actor
         {
             if (Equipped[i] != null)
             {
-                txt += $"[{i+1}] [{Equipped[i].Name}]\n";
+                txt += $"[{i + 1}] [{Equipped[i].Name}]\n";
             }
         }
         if (txt != "" || txt != null)
@@ -67,7 +67,7 @@ class Player : Actor
             }
         }
         catch
-        {Utility.Error("Something went wrong with unequipping item");}
+        { Utility.Error("Something went wrong with unequipping item"); }
     }
     public void EquipItem(Item item)
     {
@@ -115,6 +115,12 @@ class Player : Actor
             }
         }
         catch
-        {Utility.Error("Something went wrong with equipping item");}
+        { Utility.Error("Something went wrong with equipping item"); }
+    }
+    public override void TakeTurn(Entity opponent)
+    {
+        base.TakeTurn(opponent);
+        Console.WriteLine(this.Name + "'s turn!");
+
     }
 }
