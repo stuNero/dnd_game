@@ -12,13 +12,13 @@ class BattleSystem
         Defender = defender;
 
         BattleActive = true;
-        if (attacker is Enemy e)
+        if (Attacker is Enemy)
         {
-            Console.WriteLine($"A wild {e.Name} appears!");
+            Console.WriteLine($"A wild {Attacker.Name} appears!");
         }
-        else if (defender is Enemy f)
+        else if (Defender is Enemy)
         {
-            Console.WriteLine($"A wild {f.Name} appears!");
+            Console.WriteLine($"A wild {Defender.Name} appears!");
         }
         BattleLoop();
     }
@@ -41,7 +41,7 @@ class BattleSystem
     }
     void AttackerTurn()
     {
-        
+
     }
     void DefenderTurn()
     {
