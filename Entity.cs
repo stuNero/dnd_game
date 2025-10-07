@@ -2,7 +2,6 @@ namespace Game;
 
 using System.Net;
 using System.Security.Cryptography;
-using MyUtilities;
 
 abstract class Entity
 {
