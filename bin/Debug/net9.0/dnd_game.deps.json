@@ -7,30 +7,14 @@
   "targets": {
     ".NETCoreApp,Version=v9.0": {
       "dnd_game/1.0.0": {
-        "dependencies": {
-          "MyUtilities": "1.0.0"
-        },
         "runtime": {
           "dnd_game.dll": {}
-        }
-      },
-      "MyUtilities/1.0.0": {
-        "runtime": {
-          "MyUtilities.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
         }
       }
     }
   },
   "libraries": {
     "dnd_game/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "MyUtilities/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
