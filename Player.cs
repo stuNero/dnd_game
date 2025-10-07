@@ -5,11 +5,25 @@ class Player : Actor
     public Item[] Equipped = new Item[3];
     public Player(string name, int hp, int mp, int dmg, int xp, int level, int inventorySize, int maxHP)
                 : base(name, hp, mp, dmg, xp, level, inventorySize, maxHP)
-    {
-
-    }
+    { }
     public string CheckInventory()
     {
+        // Puts all items to beginning of array
+        Item[] temp = new Item[InventorySize];
+        foreach (Item item in Inventory)
+        {
+            for (int i = 0; i < temp.Length; i++)
+            {
+                if (temp[i] == null)
+                {
+                    temp[i] = item;
+                    break;
+                }
+            }
+        }
+        Array.Clear(Inventory, 0, Inventory.Length);
+        Inventory = temp;
+
         string txt = "";
 
         for (int i = 0; i < InventorySize; i++)
@@ -59,6 +73,13 @@ class Player : Actor
                     AddItem(Equipped[i]);
                     Equipped[i] = null;
                     Utility.Success(item.Name + "unequipped!");
+                    for (int j = 0; j < Inventory.Length; j++)
+                    {
+                        if (Inventory[i] == null)
+                        {
+                            Inventory[i] = item;
+                        }
+                    }
                     break;
                 }
             }
