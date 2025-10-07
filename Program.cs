@@ -86,7 +86,8 @@ while (running)
             break;
         case 4:
             choice = Utility.Prompt("Are you sure?");
-            if (string.IsNullOrWhiteSpace(choice)) { break; }
+            if (string.IsNullOrWhiteSpace(choice)) { break; }else { Environment.Exit(0); }
+
             break;
         default:
             Utility.Error("Something went wrong in menu input");
