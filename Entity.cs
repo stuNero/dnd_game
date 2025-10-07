@@ -30,9 +30,7 @@ abstract class Entity
             if (Inventory[i] == null)
             {
                 Inventory[i] = item;
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine(item.Name + " put into inventory!");
-                Console.ResetColor();
+                Utility.Success(item.Name + " put into inventory!", menuChoice:false);
                 break;
             }
         }
