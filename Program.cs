@@ -33,9 +33,9 @@ while (running)
                 {
                     if (item.Type == "weapon")
                     {
-                        player1.Hp -= item.Dmg;
+                        player1.Hp -= player1.Dmg;
                         check = true;
-                        Utility.Error($"Oof.. {player1.Name} stabbed himself with {item.Name}!\nHe took {item.Dmg} damage..");
+                        Utility.Error($"Oof.. {player1.Name} stabbed himself with {item.Name}!\nHe took {player1.Dmg} damage..");
                         break;
                     }
                 }
@@ -45,7 +45,6 @@ while (running)
                 Utility.Error("No weapon selected");
                 break;
             }
-            Utility.Prompt("");
             break;
         case 3:
             Console.Clear();
