@@ -58,10 +58,7 @@ class Player : Actor
                 {
                     AddItem(Equipped[i]);
                     Equipped[i] = null;
-                    Console.ForegroundColor = ConsoleColor.DarkGreen;
-                    Console.WriteLine(item.Name + "unequipped!");
-                    Console.ResetColor();
-                    Thread.Sleep(2000);
+                    Utility.Success(item.Name + "unequipped!");
                     break;
                 }
             }
@@ -87,10 +84,14 @@ class Player : Actor
                     break;
                 }
             }
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine(item.Name + " equipped!");
-            Console.ResetColor();
-            Thread.Sleep(2000);
+            for (int i = 0; i<Inventory.Count(); i++)
+            {
+                if (Inventory[i] == item)
+                {
+                    Inventory[i] = null;
+                }
+            }
+            Utility.Success(item.Name + " equipped!");
         }
         try
         {
