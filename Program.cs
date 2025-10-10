@@ -18,7 +18,6 @@ Menu currentMenu = Menu.Main;
 bool running = true;
 while (running)
 {
-    if (!player1.Alive) { Utility.Error("You are dead!"); }
     string choice = "";
     Console.Clear();
     switch (currentMenu)
