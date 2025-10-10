@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.Design;
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using Game;
 
@@ -17,6 +18,7 @@ Menu currentMenu = Menu.Main;
 bool running = true;
 while (running)
 {
+    if (!player1.Alive) { Utility.Error("You are dead!"); }
     string choice = "";
     Console.Clear();
     switch (currentMenu)
@@ -74,11 +76,25 @@ while (running)
                     choice = Utility.Prompt(player1.CheckInventory());
                     if (string.IsNullOrWhiteSpace(choice)) { break; }
                     int.TryParse(choice, out int nr);
+                    Console.Clear();
                     Console.WriteLine(player1.Inventory[nr - 1].Info());
-                    Console.ReadLine();
+
+                    choice = Utility.Prompt("Equip?(y/n)", clear: false);
+                    if (string.IsNullOrWhiteSpace(choice)) { break; }
+                    if (choice == "y") { player1.EquipItem(player1.Inventory[nr - 1]); }
+                    else { break; }
                     break;
                 case CharMenu.Equipped:
-                    Utility.Prompt(player1.CheckEquipped());
+                    choice = Utility.Prompt(player1.CheckEquipped());
+                    if (string.IsNullOrWhiteSpace(choice)) { break; }
+                    int.TryParse(choice, out nr);
+                    Console.Clear();
+                    Console.WriteLine(player1.Equipped[nr - 1].Info());
+
+                    choice = Utility.Prompt("Unequip?(y/n)", clear:false);
+                    if (string.IsNullOrWhiteSpace(choice)) { break; }
+                    if (choice == "y") { player1.EquipItem(player1.Inventory[nr - 1]); }
+                    else { break; }
                     break;
                 case CharMenu.Stats:
                     Utility.Prompt(player1.Info());
