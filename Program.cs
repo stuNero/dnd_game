@@ -12,24 +12,41 @@ Player player1 = new Player(name:"Max", maxHP:20, mp:10, dmg:2, xp:100, level:1,
 player1.AddItem(longsword);
 player1.AddItem(healthPotion);
 
-Enemy goblin1 = new Enemy("Goblin Soldier", 5, 5, 2, 100, 1, 3, "Goblin", 5);
+Enemy goblin1 = new Enemy("Goblin Soldier", 5, 5, 2, 100, 1, 3, "Goblin");
 
-Menu currentMenu = Menu.Main;
+Menu currentMenu = Menu.Start;
 bool running = true;
 while (running)
 {
-    string choice = "";
     Console.Clear();
+    string choice = "";
     switch (currentMenu)
     {
+        case Menu.Start:
+            Utility.GenerateMenu(title: "D U N G E O N  C R A W L E R", choices: new[] { "START", "QUIT" });
+            int.TryParse(Console.ReadLine(), out int input);
+            switch (input)
+            {
+                case 1:
+                    currentMenu = Menu.Main;
+                    break;
+                case 2:
+                    currentMenu = Menu.Quit;
+                    break;
+            }
+            break;
         case Menu.Main:
             Utility.GenerateMenu(title: "Choose an option: ", choices: new[] { "Attack enemy WIP", "Character", "Leave" });
-            int.TryParse(Console.ReadLine(), out int input);
+            int.TryParse(Console.ReadLine(), out input);
             switch (input)
             {
                 case 1: currentMenu = Menu.Battle;    break;
                 case 2: currentMenu = Menu.Character; break;
-                case 3: currentMenu = Menu.Quit;      break;
+                case 3:
+                    choice = Utility.Prompt("Are you sure?(y/n)");
+                    if(string.IsNullOrWhiteSpace(choice)) { break; }
+                    currentMenu = Menu.Start;      
+                    break;
             }
             break;
         case Menu.Battle:
@@ -61,9 +78,15 @@ while (running)
                         {
                             if (item.Type == "weapon")
                             {
-                                player1.Hp -= player1.Dmg;
-                                check = true;
+                                player1.TakeDamage(player1.Dmg);
+                                Console.WriteLine(player1.Info());
                                 Utility.Error($"Oof.. {player1.Name} stabbed himself with {item.Name}!\nHe took {player1.Dmg} damage..");
+                                if (!player1.Alive)
+                                {
+                                    Utility.Error("You died!");
+                                    currentMenu = Menu.Start;
+                                }
+                                check = true;
                                 break;
                             }
                         }
