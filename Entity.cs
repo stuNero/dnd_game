@@ -15,14 +15,9 @@ abstract class Entity
     {
         Name = name;
         Hp = maxHP;
-
+        Alive = true;
         InventorySize = inventorySize;
         Inventory = new Item[InventorySize];
-
-        if (Hp > 0)
-        { Alive = true; }
-        else
-        { Alive = false; }
     }
     public void AddItem(Item item)
     {
@@ -84,7 +79,11 @@ abstract class Entity
     }
     public virtual void TakeDamage(int amount)
     {
-        
+        this.Hp -= amount;
+        if (this.Hp <= 0)
+        {
+            this.Alive = false;
+        }
     }
     public virtual void TakeTurn(Entity opponent)
     {
