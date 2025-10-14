@@ -32,11 +32,4 @@ abstract class Actor : Entity
         txt += "___________________";
         return txt;
     }
-    public void UpdateStats()
-    {
-        foreach (Item item in Inventory)
-        {
-
-        }
-    }
 }

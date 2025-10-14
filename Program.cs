@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using Game;
@@ -71,39 +72,26 @@ while (running)
             {
                 case CharMenu.TakeDamage:
                     Console.Clear();
-                    bool check = false;
-                    foreach (Item item in player1.Equipped)
+                    player1.TakeDamage(player1.Dmg);
+                    Console.WriteLine(player1.Info());
+                    Utility.Error($"Oof.. {player1.Name} hit himself with {player1.Equipped.ElementAtOrDefault(0)?.Name ?? "his fist"}!\nHe took {player1.Dmg} damage..");
+                    if (!player1.Alive)
                     {
-                        if (item != null)
-                        {
-                            if (item.Type == "weapon")
-                            {
-                                player1.TakeDamage(player1.Dmg);
-                                Console.WriteLine(player1.Info());
-                                Utility.Error($"Oof.. {player1.Name} stabbed himself with {item.Name}!\nHe took {player1.Dmg} damage..");
-                                if (!player1.Alive)
-                                {
-                                    Utility.Error("You died!");
-                                    currentMenu = Menu.Start;
-                                }
-                                check = true;
-                                break;
-                            }
-                        }
+                        Utility.Error("You died!");
+                        currentMenu = Menu.Start;
                     }
-                    if (!check)
-                    { Utility.Error("No weapon selected"); break; }
                     break;
                 case CharMenu.Inventory:
                     choice = Utility.Prompt(player1.CheckInventory());
                     if (string.IsNullOrWhiteSpace(choice)) { break; }
                     int.TryParse(choice, out int nr);
+
                     Console.Clear();
-                    Console.WriteLine(player1.Inventory[nr - 1].Info());
+                    Console.WriteLine(player1.Inventory[nr - 1]!.Info());
 
                     choice = Utility.Prompt("Equip?(y/n)", clear: false);
                     if (string.IsNullOrWhiteSpace(choice)) { break; }
-                    if (choice == "y") { player1.EquipItem(player1.Inventory[nr - 1]); }
+                    if (choice == "y") { player1.EquipItem(player1.Inventory[nr - 1]!); }
                     else { break; }
                     break;
                 case CharMenu.Equipped:
@@ -111,11 +99,11 @@ while (running)
                     if (string.IsNullOrWhiteSpace(choice)) { break; }
                     int.TryParse(choice, out nr);
                     Console.Clear();
-                    Console.WriteLine(player1.Equipped[nr - 1].Info());
+                    Console.WriteLine(player1.Equipped[nr - 1]!.Info());
 
                     choice = Utility.Prompt("Unequip?(y/n)", clear:false);
                     if (string.IsNullOrWhiteSpace(choice)) { break; }
-                    if (choice == "y") { player1.EquipItem(player1.Inventory[nr - 1]); }
+                    if (choice == "y") { player1.UnEquipItem(player1.Inventory[nr-1]!); }
                     else { break; }
                     break;
                 case CharMenu.Stats:
