@@ -40,28 +40,51 @@ class Player : Actor
 
         for (int i = 0; i < Equipped.Length; i++)
         {
-            txt += $"[{i + 1}] [{Equipped.ElementAtOrDefault(i)?.Name ?? "Empty Slot"}]\n";
+            switch (i)
+            {
+                case 0:
+                    txt += $"[{i + 1}] [{Equipped.ElementAtOrDefault(i)?.Name ?? "Primary Weapon - Empty Slot"}]\n";
+                    break;
+                case 1:
+                    txt += $"[{i + 1}] [{Equipped.ElementAtOrDefault(i)?.Name ?? "Off Hand       - Empty Slot"}]\n";
+                    break;
+                case 2:
+                    txt += $"[{i + 1}] [{Equipped.ElementAtOrDefault(i)?.Name ?? "Consumable     - Empty Slot"}]\n";
+                    break;
+            }
         }
         return txt;
     }
     public void UnEquipItem(Item item)
     {
-        for (int i = 0; i < Equipped.Length; i++)
+        void UnEquip(Item item)
         {
-            if (Equipped[i] == item)
+            for (int i = 0; i < Equipped.Length; i++)
             {
-                Debug.Assert(Equipped[i] != null);
-                AddItem(Equipped[i]!);
-                Equipped[i] = null;
-                Utility.Success(item.Name + "unequipped!");
-                for (int j = 0; j < Inventory.Length; j++)
+                if (Equipped[i] == item)
                 {
-                    if (Inventory[i] == null)
+                    Debug.Assert(Equipped[i] != null);
+                    AddItem(Equipped[i]!);
+                    Equipped[i] = null;
+                    Utility.Success(item.Name + " unequipped!");
+                    for (int j = 0; j < Inventory.Length; j++)
                     {
-                        Inventory[i] = item;
+                        if (Inventory[i] == null)
+                        {
+                            Inventory[i] = item;
+                        }
                     }
+                    break;
                 }
-                break;
+            }
+        }
+        if(item.Type == "weapon")
+        {
+            if (item.Equipped)
+            {
+                UnEquip(item);
+                item.Equipped = false;
+                this.Dmg -= item.Dmg;
             }
         }
     }
