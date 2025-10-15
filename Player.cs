@@ -1,22 +1,23 @@
 namespace Game;
-
+using System.Diagnostics;
 class Player : Actor
 {
-    public Item[] Equipped = new Item[3];
-    public Player(string name, int hp, int mp, int dmg, int xp, int level, int inventorySize, int maxHP)
-                : base(name, hp, mp, dmg, xp, level, inventorySize, maxHP)
+    public Item?[] Equipped = new Item?[3];
+    public Player(string name, int maxHP, int mp, int dmg, int xp, int level, int inventorySize)
+                : base(name, maxHP, mp, dmg, xp, level, inventorySize)
     { }
     public string CheckInventory()
     {
         // Puts all items to beginning of array
         Item[] temp = new Item[InventorySize];
-        foreach (Item item in Inventory)
+        foreach (Item? item in Inventory)
         {
             for (int i = 0; i < temp.Length; i++)
             {
                 if (temp[i] == null)
                 {
-                    temp[i] = item;
+                    if (item != null)
+                    { temp[i] = item; }
                     break;
                 }
             }
@@ -26,21 +27,12 @@ class Player : Actor
 
         string txt = "";
 
+        // Checking inventory: 
         for (int i = 0; i < InventorySize; i++)
         {
-            if (Inventory[i] != null)
-            {
-                txt += $"[{i + 1}] [{Inventory[i].Name}]\n";
-            }
+            txt += $"[{i + 1}] [{Inventory.ElementAtOrDefault(i)?.Name ?? "Empty Slot"}]\n";
         }
-        if (txt != "" || txt != null)
-        {
-            return txt;
-        }
-        else
-        {
-            return "Inventory is empty...";
-        }
+        return txt;
     }
     public string CheckEquipped()
     {
@@ -48,31 +40,33 @@ class Player : Actor
 
         for (int i = 0; i < Equipped.Length; i++)
         {
-            if (Equipped[i] != null)
+            switch (i)
             {
-                txt += $"[{i + 1}] [{Equipped[i].Name}]\n";
+                case 0:
+                    txt += $"[{i + 1}] [{Equipped.ElementAtOrDefault(i)?.Name ?? "Primary Weapon - Empty Slot"}]\n";
+                    break;
+                case 1:
+                    txt += $"[{i + 1}] [{Equipped.ElementAtOrDefault(i)?.Name ?? "Off Hand       - Empty Slot"}]\n";
+                    break;
+                case 2:
+                    txt += $"[{i + 1}] [{Equipped.ElementAtOrDefault(i)?.Name ?? "Consumable     - Empty Slot"}]\n";
+                    break;
             }
         }
-        if (txt != "" || txt != null)
-        {
-            return txt;
-        }
-        else
-        {
-            return "Inventory is empty...";
-        }
+        return txt;
     }
     public void UnEquipItem(Item item)
     {
-        try
+        void UnEquip(Item item)
         {
             for (int i = 0; i < Equipped.Length; i++)
             {
                 if (Equipped[i] == item)
                 {
-                    AddItem(Equipped[i]);
+                    Debug.Assert(Equipped[i] != null);
+                    AddItem(Equipped[i]!);
                     Equipped[i] = null;
-                    Utility.Success(item.Name + "unequipped!");
+                    Utility.Success(item.Name + " unequipped!");
                     for (int j = 0; j < Inventory.Length; j++)
                     {
                         if (Inventory[i] == null)
@@ -84,8 +78,15 @@ class Player : Actor
                 }
             }
         }
-        catch
-        { Utility.Error("Something went wrong with unequipping item"); }
+        if(item.Type == "weapon")
+        {
+            if (item.Equipped)
+            {
+                UnEquip(item);
+                item.Equipped = false;
+                this.Dmg -= item.Dmg;
+            }
+        }
     }
     public void EquipItem(Item item)
     {
@@ -95,12 +96,12 @@ class Player : Actor
             {
                 if (Equipped[i] != null)
                 {
-                    AddItem(Equipped[i]);
+                    AddItem(Equipped[i]!);
                     Equipped[i] = item;
                     break;
                 }
-                else
-                {
+                else if (Equipped[i] == null)
+                {   
                     Equipped[i] = item;
                     break;
                 }
@@ -114,30 +115,25 @@ class Player : Actor
             }
             Utility.Success(item.Name + " equipped!");
         }
-        try
+        switch (item.Type)
         {
-            switch (item.Type)
-            {
-                case "weapon":
-                    if (!item.Equipped)
-                    {
-                        Equip(item);
-                        item.Equipped = true;
-                        this.Dmg += item.Dmg;
-                    }
-                    break;
-                case "consumable":
-                    this.Hp += item.Value;
-                    if (this.Hp > this.MaxHP)
-                    {
-                        this.Hp = this.MaxHP;
-                    }
+            case "weapon":
+                if (!item.Equipped)
+                {
                     Equip(item);
-                    break;
-            }
+                    item.Equipped = true;
+                    this.Dmg += item.Dmg;
+                }
+                break;
+            case "consumable":
+                this.Hp += item.Value;
+                if (this.Hp > this.MaxHP)
+                {
+                    this.Hp = this.MaxHP;
+                }
+                Equip(item);
+                break;
         }
-        catch
-        { Utility.Error("Something went wrong with equipping item"); }
     }
     public override void TakeTurn(Entity opponent)
     {
