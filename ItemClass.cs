@@ -6,7 +6,6 @@ class Item
     public string Type; 
     public int Dmg;
     public int Value;
-    public bool Equipped = false;
 
     public Item(string name, string type)
     {
