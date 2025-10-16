@@ -9,23 +9,23 @@ abstract class Actor : Entity
     public int Dmg;
     public int Xp;
     public int XpDrop;
-    public int Level;
+    public int Lvl;
 
-    public Actor(string name, int maxHP, int mp, int dmg, int xp, int level, int inventorySize)
+    public Actor(string name, int maxHP, int mp, int dmg, int xp, int lvl, int inventorySize)
             : base(name, maxHP, inventorySize)
     {
         Mp = mp;
         Dmg = dmg;
         Xp = xp;
         XpDrop = Xp / 100;
-        Level = level;
+        Lvl = lvl;
     }
     public string Info()
     {
         string txt = "___________________\n";
 
         txt += $"Name: [{Name}]\n"
-             + $"LVL:  [{Level}]\n"
+             + $"LVL:  [{Lvl}]\n"
              + $"HP:   [{Hp}]\n"
              + $"MP:   [{Mp}]\n"
              + $"DMG:  [{Dmg}]\n";
