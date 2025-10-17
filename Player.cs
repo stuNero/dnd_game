@@ -6,54 +6,97 @@ class Player : Actor
     public Player(string name, int maxHP, int mp, int dmg, int xp, int lvl, int inventorySize)
                 : base(name, maxHP, mp, dmg, xp, lvl, inventorySize)
     { }
-    public string CheckInventory()
+    public void CheckInventory()
     {
-        // Puts all items to beginning of array
-        Item[] temp = new Item[InventorySize];
-        foreach (Item? item in Inventory)
+        string Display()
         {
-            for (int i = 0; i < temp.Length; i++)
+            // Puts all items to beginning of array
+            Item[] temp = new Item[InventorySize];
+            foreach (Item? item in Inventory)
             {
-                if (temp[i] == null)
+                for (int i = 0; i < temp.Length; i++)
                 {
-                    if (item != null)
-                    { temp[i] = item; }
-                    break;
+                    if (temp[i] == null)
+                    {
+                        if (item != null)
+                        { temp[i] = item; }
+                        break;
+                    }
                 }
             }
-        }
-        Array.Clear(Inventory, 0, Inventory.Length);
-        Inventory = temp;
+            Array.Clear(Inventory, 0, Inventory.Length);
+            Inventory = temp;
 
-        string txt = "";
+            string txt = "";
 
-        // Checking inventory: 
-        for (int i = 0; i < InventorySize; i++)
-        {
-            txt += $"[{i + 1}] [{Inventory.ElementAtOrDefault(i)?.Name ?? "Empty Slot"}]\n";
-        }
-        return txt;
-    }
-    public string CheckEquipped()
-    {
-        string txt = "";
-
-        for (int i = 0; i < Equipped.Length; i++)
-        {
-            switch (i)
+            // Checking inventory: 
+            for (int i = 0; i < InventorySize; i++)
             {
-                case 0:
-                    txt += $"[{i + 1}] [{Equipped.ElementAtOrDefault(i)?.Name ?? "Primary Weapon - Empty Slot"}]\n";
-                    break;
-                case 1:
-                    txt += $"[{i + 1}] [{Equipped.ElementAtOrDefault(i)?.Name ?? "Off Hand       - Empty Slot"}]\n";
-                    break;
-                case 2:
-                    txt += $"[{i + 1}] [{Equipped.ElementAtOrDefault(i)?.Name ?? "Consumable     - Empty Slot"}]\n";
-                    break;
+                txt += $"[{i + 1}] [{Inventory.ElementAtOrDefault(i)?.Name ?? "Empty Slot"}]\n";
             }
+            return txt;
         }
-        return txt;
+        string choice = Utility.Prompt(Display());
+        if (string.IsNullOrWhiteSpace(choice)) { return; }
+        int.TryParse(choice, out int nr);
+        if (nr-1 > Inventory.Length) {Utility.Error("No item selected!"); return; }
+        if (this.Inventory[nr - 1] != null)
+        {
+            Console.Clear();
+            Console.WriteLine(this.Inventory[nr - 1]!.Info());
+
+            choice = Utility.Prompt("Equip?(y/n)", clear: false);
+            if (string.IsNullOrWhiteSpace(choice)) { return; }
+            if (choice == "y") { this.EquipItem(this.Inventory[nr - 1]!); }
+            else { return; }
+        }
+        else
+        {
+            Utility.Error("No item selected!");
+        }
+                    
+    }
+    public void CheckEquipped()
+    {
+        string Display()
+        {
+            string txt = "";
+
+            for (int i = 0; i < Equipped.Length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        txt += $"[{i + 1}] [{Equipped.ElementAtOrDefault(i)?.Name ?? "Primary Weapon - Empty Slot"}]\n";
+                        break;
+                    case 1:
+                        txt += $"[{i + 1}] [{Equipped.ElementAtOrDefault(i)?.Name ?? "Off Hand       - Empty Slot"}]\n";
+                        break;
+                    case 2:
+                        txt += $"[{i + 1}] [{Equipped.ElementAtOrDefault(i)?.Name ?? "Consumable     - Empty Slot"}]\n";
+                        break;
+                }
+            }
+            return txt;
+        }
+        string choice = Utility.Prompt(Display());
+        if (string.IsNullOrWhiteSpace(choice)) { return; }
+        int.TryParse(choice, out int nr);
+        if (nr-1 > Equipped.Length) {Utility.Error("No item selected!"); return; }
+        if (this.Equipped[nr - 1] != null)
+        {
+            Console.Clear();
+            Console.WriteLine(this.Equipped[nr - 1]!.Info());
+
+            choice = Utility.Prompt("Unequip?(y/n)", clear: false);
+            if (string.IsNullOrWhiteSpace(choice)) { return; }
+            if (choice == "y") { this.UnEquipItem(this.Equipped[nr - 1]!); }
+            else { return; }
+        }
+        else
+        {
+            Utility.Error("No item selected!");
+        } 
     }
     public void UnEquipItem(Item item)
     {

@@ -82,44 +82,10 @@ while (running)
                     }
                     break;
                 case CharMenu.Inventory:
-                    choice = Utility.Prompt(player1.CheckInventory());
-                    if (string.IsNullOrWhiteSpace(choice)) { break; }
-                    int.TryParse(choice, out int nr);
-                    if (!player1.Inventory.Contains(player1.Inventory[nr - 1]))
-                    { Utility.Error("No item selected!"); Console.ReadLine(); break; }
-                    if (player1.Inventory[nr - 1] != null)
-                    {
-                        Console.Clear();
-                        Console.WriteLine(player1.Inventory[nr - 1]!.Info());
-
-                        choice = Utility.Prompt("Equip?(y/n)", clear: false);
-                        if (string.IsNullOrWhiteSpace(choice)) { break; }
-                        if (choice == "y") { player1.EquipItem(player1.Inventory[nr - 1]!); }
-                        else { break; }
-                    }
-                    else
-                    {
-                        Utility.Error("No item selected!");
-                    }
+                    player1.CheckInventory();
                     break;
                 case CharMenu.Equipped:
-                    choice = Utility.Prompt(player1.CheckEquipped());
-                    if (string.IsNullOrWhiteSpace(choice)) { break; }
-                    int.TryParse(choice, out nr);
-                    if (player1.Equipped[nr - 1] != null)
-                    {
-                        Console.Clear();
-                        Console.WriteLine(player1.Equipped[nr - 1]!.Info());
-
-                        choice = Utility.Prompt("Unequip?(y/n)", clear: false);
-                        if (string.IsNullOrWhiteSpace(choice)) { break; }
-                        if (choice == "y") { player1.UnEquipItem(player1.Equipped[nr - 1]!); }
-                        else { break; }
-                    }
-                    else
-                    {
-                        Utility.Error("No item selected!"); 
-                    }
+                    player1.CheckEquipped();
                     break;
                 case CharMenu.Stats:
                     Utility.Prompt(player1.Info());
