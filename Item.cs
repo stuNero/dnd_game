@@ -3,44 +3,22 @@ namespace Game;
 class Item
 {
     public string Name;
-    public string Type; 
-    public int Dmg;
     public int Value;
 
-    public Item(string name, string type)
+    public Item(string name, int value)
     {
-        /// <summary>
-        /// Choose -type- between "weapon", "consumable"
-        /// </summary>
         Name = name;
-        Type = type;
+        Value = value;
+
     }
     public string Info()
     {
-        if (Type == "weapon")
+        string type = "Health Points";
+        if (this is Weapon w)
         {
-            return  $"Name:     [{Name}]\n"+
-                    $"Damage:   [{Dmg}]";
+            type = "Damage";
         }
-        else
-        {
-            return  $"Name:     [{Name}]\n"+
-                    $"HP:       [{Value}]";
-        }
-    }
-    public void DefineItem(int value)
-    {
-        switch (Type)
-        {
-            case "weapon":
-                Dmg = value;
-                break;
-            case "consumable":
-                Value = value;
-                break;
-            default:
-                Utility.Error("Something went wrong when defining item..");
-                break;
-        }
+        return  $"Name:     [{Name}]\n"+
+                $"{type}:   [{Value}]";
     }
 }
