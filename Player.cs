@@ -121,10 +121,10 @@ class Player : Actor
                 }
             }
         }
-        if(item.Type == "weapon")
+        if(item is Weapon)
         {
             UnEquip(item);
-            this.Dmg -= item.Dmg;
+            this.Dmg -= item.Value;
         }
     }
     public void EquipItem(Item item)
@@ -133,7 +133,7 @@ class Player : Actor
         {
             for (int i = 0; i < Equipped.Length; i++)
             {
-                if (item.Type != "consumable")
+                if (item is not Consumable)
                 {
                     if (Equipped[i] != null)
                     {
@@ -156,14 +156,14 @@ class Player : Actor
                 }
             }
         }
-        switch (item.Type)
+        switch (item)
         {
-            case "weapon":
+            case Weapon:
                 Equip(item);
-                this.Dmg += item.Dmg;
+                this.Dmg += item.Value;
                 Utility.Success(item.Name + " equipped!");
                 break;
-            case "consumable":
+            case Consumable:
                 int restoredHP = item.Value;
                 int leftOverHP = 0;
                 this.Hp += item.Value;

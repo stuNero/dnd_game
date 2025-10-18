@@ -7,8 +7,8 @@ using Game;
 Player? player1 = null;
 Enemy? goblin1 = null;
 
-Item? longsword = null;
-Item? healthPotion = null;
+Weapon? longsword = null;
+Consumable? healthPotion = null;
 
 Menu currentMenu = Menu.Start;
 bool running = true;
@@ -19,10 +19,8 @@ while (running)
     switch (currentMenu)
     {
         case Menu.Start:
-            longsword = new Item("Longsword", "weapon");
-            longsword.DefineItem(value:2);
-            healthPotion = new Item("Health Potion", "consumable");
-            healthPotion.DefineItem(value:3);
+            longsword       = new Weapon("Longsword", 2);
+            healthPotion    = new Consumable("Health Potion", 3);
 
             player1 = new Player(name:"Max", maxHP:20, mp:10, dmg:1, xp:100, lvl:1, inventorySize:5);
             player1.AddItem(longsword);
