@@ -133,16 +133,19 @@ class Player : Actor
         {
             for (int i = 0; i < Equipped.Length; i++)
             {
-                if (Equipped[i] != null)
+                if (item.Type != "consumable")
                 {
-                    AddItem(Equipped[i]!);
-                    Equipped[i] = item;
-                    break;
-                }
-                else if (Equipped[i] == null)
-                {
-                    Equipped[i] = item;
-                    break;
+                    if (Equipped[i] != null)
+                    {
+                        AddItem(Equipped[i]!);
+                        Equipped[i] = item;
+                        break;
+                    }
+                    else if (Equipped[i] == null)
+                    {
+                        Equipped[i] = item;
+                        break;
+                    }
                 }
             }
             for (int i = 0; i < Inventory.Count(); i++)
@@ -161,14 +164,16 @@ class Player : Actor
                 Utility.Success(item.Name + " equipped!");
                 break;
             case "consumable":
-                Equip(item);
-                this.Hp += item.Value;
                 int restoredHP = item.Value;
+                int leftOverHP = 0;
+                this.Hp += item.Value;
                 if (this.Hp > this.MaxHP)
                 {
+                    leftOverHP = this.Hp - MaxHP;
                     this.Hp = this.MaxHP;
-                    restoredHP = MaxHP - Hp;
                 }
+                restoredHP = restoredHP - leftOverHP;
+                Equip(item);
                 Utility.Success($"{this.Name} restored {restoredHP}!");
                 break;
         }
