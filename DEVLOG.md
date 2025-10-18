@@ -2,6 +2,7 @@
 - Fully implement basic combat
 - Save to file
     - each character has a save file
+- Make a lot of weapons and flesh out item system with different types and crit variable etc.
 
 
 
