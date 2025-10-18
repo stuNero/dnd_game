@@ -78,7 +78,7 @@ while (running)
             {
                 case CharMenu.TakeDamage:
                     Console.Clear();
-                    player1.TakeDamage(player1.Dmg);
+                    player1!.TakeDamage(player1.Dmg);
                     Console.WriteLine(player1.Info());
                     Utility.Error($"Oof.. {player1.Name} hit himself with {player1.Equipped.ElementAtOrDefault(0)?.Name ?? "his fist"}!\nHe took {player1.Dmg} damage..");
                     if (!player1.Alive)
@@ -88,13 +88,13 @@ while (running)
                     }
                     break;
                 case CharMenu.Inventory:
-                    player1.CheckInventory();
+                    player1!.CheckInventory();
                     break;
                 case CharMenu.Equipped:
-                    player1.CheckEquipped();
+                    player1!.CheckEquipped();
                     break;
                 case CharMenu.Stats:
-                    Utility.Prompt(player1.Info());
+                    Utility.Prompt(player1!.Info());
                     break;
                 default:
                     Utility.Error("Something went wrong in sub-menu input");
