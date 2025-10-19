@@ -74,4 +74,35 @@ abstract class Utility
         Console.ResetColor();
         Console.Clear();
     }
+    public static void Narrate(string text, ConsoleColor color = ConsoleColor.DarkYellow, bool slow = true, int charDelayMs = 30, bool waitForKey = true)
+    {
+        var prev = Console.ForegroundColor;
+        Console.ForegroundColor = color;
+
+        if (!slow)
+        {
+            Console.WriteLine(text);
+        }
+        else
+        {
+            foreach (var ch in text)
+            {
+                Console.Write(ch);
+                System.Threading.Thread.Sleep(charDelayMs);
+            }
+            Console.WriteLine();
+        }
+
+        Console.ForegroundColor = prev;
+
+        if (waitForKey)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine();
+            Console.WriteLine("Press any key to continue...");
+            Console.ResetColor();
+            Console.ReadKey(true);
+            Console.Clear();
+        }
+    }
 }
