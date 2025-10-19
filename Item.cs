@@ -13,12 +13,19 @@ class Item
     }
     public string Info()
     {
-        string type = "Health Points";
-        if (this is Weapon w)
+        if (this is Weapon)
         {
-            type = "Damage";
+            return  $"Name:   [{Name}]\n" +
+                    $"Damage: [{Value}]";
         }
-        return  $"Name:     [{Name}]\n"+
-                $"{type}:   [{Value}]";
+        else if (this is Consumable)
+        {
+            return $"Name:   [{Name}]\n" +
+                   $"HP:     [{Value}]";
+        }
+        else
+        {
+            return "Unknown item";
+        }
     }
 }
