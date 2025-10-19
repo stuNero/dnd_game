@@ -39,14 +39,13 @@ while (running)
             break;
         case Menu.Creation:
             player1 = new Player(name:"Max", maxHP:20, mp:10, dmg:1, xp:100, lvl:1, inventorySize:5);
-
-            bool chooseItems = true;
-            while (chooseItems)
+            Utility.Narrate(text: "The hinges of the door creaks and you enter the room,\nyour torch light slowly " +
+            "illuminates an unlocked rusty, matte padlock..\n");
+            Utility.Narrate(text: "As you step closer you make out the outlines of an\n" +
+            "old oak chest which materializes from the black, seemingly infinite void room. ");
+            int ctr = 0;
+            while (ctr < 3)
             {
-                Utility.Narrate(text: "The hinges of the door creaks and you enter the room,\nyour torch light slowly " +
-                "illuminates an unlocked rusty, matte padlock..\n");
-                Utility.Narrate(text: "As you step closer you make out the outlines of an\n" +
-                "old oak chest which materializes from the black, seemingly infinite void room. ");
                 Utility.GenerateMenu(title: "Choose Your Starting Items");
                 for (int i = 0; i < items.Count; i++)
                 {
@@ -56,11 +55,14 @@ while (running)
                         Console.WriteLine(items[i].Info());
                     }
                 }
-                choice = Utility.Prompt(">",clear:false);
+                choice = Utility.Prompt(">", clear: false);
                 if (string.IsNullOrWhiteSpace(choice)) { break; }
                 int.TryParse(choice, out input);
-                player1.AddItem(items[input-1]);
+                player1.AddItem(items[input - 1]);
+                ctr++;
+
             }
+            Utility.Narrate("You delve into the depths of the dungeon...");
             currentMenu = Menu.Main;
             break;
         case Menu.Main:
