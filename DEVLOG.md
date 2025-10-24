@@ -7,7 +7,7 @@
     - Crit Damage
     - Enum for Item types
     - Sub classes for weapons
-
+- Fix damage on equipping item on another item
 
 
 
