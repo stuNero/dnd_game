@@ -137,8 +137,9 @@ class Player : Actor
                 {
                     if (Equipped[i] != null)
                     {
-                        AddItem(Equipped[i]!);
+                        UnEquipItem(Equipped[i]!);
                         Equipped[i] = item;
+
                         break;
                     }
                     else if (Equipped[i] == null)
