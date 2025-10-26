@@ -3,9 +3,9 @@ namespace Game;
 class Item
 {
     public string Name;
-    public int Value;
+    public double Value;
 
-    public Item(string name, int value)
+    public Item(string name, double value)
     {
         Name = name;
         Value = value;
@@ -13,19 +13,7 @@ class Item
     }
     public string Info()
     {
-        if (this is Weapon)
-        {
-            return  $"Name:   [{Name}]\n" +
-                    $"Damage: [{Value}]";
-        }
-        else if (this is Consumable)
-        {
-            return $"Name:   [{Name}]\n" +
-                   $"HP:     [{Value}]";
-        }
-        else
-        {
-            return "Unknown item";
-        }
+        return  $"Name:   [{Name}]\n" +
+                $"Damage: [{Value}]";
     }
 }

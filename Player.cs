@@ -3,7 +3,7 @@ using System.Diagnostics;
 class Player : Actor
 {
     public Item?[] Equipped = new Item?[3];
-    public Player(string name, int maxHP, int mp, int dmg, int xp, int lvl, int inventorySize)
+    public Player(string name, double maxHP, int mp, double dmg, int xp, int lvl, int inventorySize)
                 : base(name, maxHP, mp, dmg, xp, lvl, inventorySize)
     { }
     public void CheckInventory()
@@ -42,7 +42,7 @@ class Player : Actor
         if (nr-1 > Inventory.Length) {Utility.Error("No item selected!"); return; }
         if (this.Inventory[nr - 1] != null)
         {
-            Console.Clear();
+            try{Console.Clear();} catch{}
             Console.WriteLine(this.Inventory[nr - 1]!.Info());
 
             choice = Utility.Prompt("Equip?(y/n)", clear: false);
@@ -85,7 +85,7 @@ class Player : Actor
         if (nr-1 > Equipped.Length) {Utility.Error("No item selected!"); return; }
         if (this.Equipped[nr - 1] != null)
         {
-            Console.Clear();
+            try{Console.Clear();} catch{}
             Console.WriteLine(this.Equipped[nr - 1]!.Info());
 
             choice = Utility.Prompt("Unequip?(y/n)", clear: false);
@@ -139,7 +139,6 @@ class Player : Actor
                     {
                         UnEquipItem(Equipped[i]!);
                         Equipped[i] = item;
-
                         break;
                     }
                     else if (Equipped[i] == null)
@@ -165,8 +164,8 @@ class Player : Actor
                 Utility.Success(item.Name + " equipped!");
                 break;
             case Consumable:
-                int restoredHP = item.Value;
-                int leftOverHP = 0;
+                double restoredHP = item.Value;
+                double leftOverHP = 0;
                 this.Hp += item.Value;
                 if (this.Hp > this.MaxHP)
                 {

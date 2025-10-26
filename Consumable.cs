@@ -2,6 +2,6 @@ namespace Game;
 
 class Consumable : Item
 {
-    public Consumable(string name, int value):base(name, value)
+    public Consumable(string name, double value):base(name, value)
     {}
 }
