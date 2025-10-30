@@ -34,13 +34,24 @@ abstract class Utility
     public static string Prompt(string input, bool clear = true)
     {
         if (clear)
-        { try{Console.Clear();} catch{} }
+        { try { Console.Clear(); } catch { } }
         Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.WriteLine("\n(Empty line and 'ENTER' to cancel..)");
         Console.ForegroundColor = ConsoleColor.DarkYellow;
         Console.Write(input);
         Console.ResetColor();
         return Console.ReadLine()!;
+    }
+    public static ConsoleKeyInfo PromptKey(string input, bool clear = true)
+    {
+        if (clear)
+        { try{Console.Clear();} catch{} }
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.WriteLine("\n(Empty line and 'ENTER' to cancel..)");
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.Write(input);
+        Console.ResetColor();
+        return Console.ReadKey()!;
     }
     /// <summary>
     /// Prints a colored Error message and an option to return to menu
