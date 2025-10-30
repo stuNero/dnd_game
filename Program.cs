@@ -22,6 +22,7 @@ while (running)
 {
     try{Console.Clear();} catch{}
     string choice = "";
+    bool subRunning;
     switch (currentMenu)
     {
         case Menu.Start:
@@ -54,24 +55,61 @@ while (running)
             }
             while (player1.InventoryRange() < 3)
             {
-                player1.CheckInventory();
-                Utility.GenerateMenu(title: "\nChoose Your Starting Items");
-                for (int i = 0; i < items.Count; i++)
+                subRunning = true;
+                int selectedItemIndex = 0;
+                while (subRunning)
                 {
-                    if (!player1.Inventory.Contains(items[i]))
+                    List<string> itemList = new();
+                    foreach (Item item in items)
                     {
-                        Console.WriteLine($"[{i + 1}]");
-                        Console.WriteLine(items[i].Info());
+                        if (!player1.Inventory.Contains(item))
+                        {
+                            itemList.Add(item.Info());
+                        }
+                    }
+                    string[] itemArray = itemList.ToArray();
+                    try {Console.Clear();} catch {}
+                    Utility.GenerateMenu(title: "\nChoose Your Starting Items");
+                    Utility.GenerateMenuActions(selectedItemIndex, itemArray);
+                    player1.CheckInventory();
+                    switch (Console.ReadKey().Key)
+                    {
+                        case ConsoleKey.UpArrow:
+                            selectedItemIndex--;
+                            if (selectedItemIndex < 0)
+                                selectedItemIndex = itemArray.Length - 1;
+                            break;
+                        case ConsoleKey.DownArrow:
+                            selectedItemIndex++;
+                            if (selectedItemIndex >= itemArray.Length)
+                                selectedItemIndex = 0;
+                            break;
+                        case ConsoleKey.Enter:
+                            Console.Clear();
+                            subRunning = false;
+                            player1.AddItem(items[selectedItemIndex]);
+                            break;
+                        case ConsoleKey.Escape:
+                            currentMenu = Menu.Main;
+                            break;
                     }
                 }
-                choice = Utility.Prompt(">", clear: false);
-                if (string.IsNullOrWhiteSpace(choice)) { break; }
+                // for (int i = 0; i < items.Count; i++)
+                // {
+                //     if (!player1.Inventory.Contains(items[i]))
+                //     {
+                //         Console.WriteLine($"[{i + 1}]");
+                //         Console.WriteLine(items[i].Info());
+                //     }
+                // }
+                // choice = Utility.Prompt(">", clear: false);
+                // if (string.IsNullOrWhiteSpace(choice)) { break; }
                 
-                int.TryParse(choice, out input);
-                if (!player1.InInventoryRange(input)) { break; }
+                // int.TryParse(choice, out input);
+                // if (!player1.InInventoryRange(input)) { break; }
 
-                player1.AddItem(items[input - 1]);
-                try { Console.Clear(); } catch { }
+                // player1.AddItem(items[input - 1]);
+                // try { Console.Clear(); } catch { }
             }
             if (narration)
             {
@@ -80,17 +118,38 @@ while (running)
             currentMenu = Menu.Main;
             break;
         case Menu.Main:
-            Utility.GenerateMenu(title: "Choose an option: ", choices: new[] { "Attack enemy WIP", "Character", "Leave" });
-            keyInput = Console.ReadKey();
-            switch (keyInput.Key)
+            subRunning = true;
+            int selectedIndex = 0;
+            string[] mainOptions = ["Attack enemy WIP", "Character"];
+            Dictionary<string, Menu> menuOptions = new Dictionary<string, Menu>();
+            menuOptions.Add(mainOptions[0], Menu.Battle);
+            menuOptions.Add(mainOptions[1], Menu.Character);
+            while (subRunning)
             {
-                case ConsoleKey.D1: currentMenu = Menu.Battle;    break;
-                case ConsoleKey.D2: currentMenu = Menu.Character; break;
-                case ConsoleKey.D3:
-                    keyInput = Utility.PromptKey("Are you sure?(Y/n)");
-                    if      (keyInput.Key == ConsoleKey.Enter) { break; }
-                    else if (keyInput.Key == ConsoleKey.Y) { currentMenu = Menu.Start; }
-                    break;
+                Console.Clear();
+                Utility.GenerateMenuActions(selectedIndex, mainOptions);
+                switch (Console.ReadKey().Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        selectedIndex--;
+                        if (selectedIndex < 0)
+                            selectedIndex = mainOptions.Length - 1;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        selectedIndex++;
+                        if (selectedIndex >= mainOptions.Length)
+                            selectedIndex = 0;
+                        break;
+                    case ConsoleKey.Enter:
+                        subRunning = false;
+                        currentMenu = menuOptions[mainOptions[selectedIndex]];
+                        break;
+                    case ConsoleKey.Escape:
+                        keyInput = Utility.PromptKey("Are you sure?(Y/n)");
+                        if      (keyInput.Key != ConsoleKey.Y)  { }
+                        else if (keyInput.Key == ConsoleKey.Y)  { currentMenu = Menu.Start; subRunning = false; }
+                        break;
+                }
             }
             break;
         case Menu.Battle:
