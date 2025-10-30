@@ -15,13 +15,11 @@ items.Add(new Weapon("Flanged Mace", 2, WeaponType.Mace));
 items.Add(new Consumable("Health Potion", 2));
 
 Menu currentMenu = Menu.Start;
-int input = 0;
 bool running = true;
 bool narration = true;
 while (running)
 {
     try{Console.Clear();} catch{}
-    string choice = "";
     bool subRunning;
     switch (currentMenu)
     {
