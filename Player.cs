@@ -6,7 +6,7 @@ class Player : Actor
     public Player(string name, double maxHP, int mp, double dmg, int xp, int lvl, int inventorySize)
                 : base(name, maxHP, mp, dmg, xp, lvl, inventorySize)
     { }
-    public void CheckInventory()
+    public void CheckInventory(bool equip = false)
     {
         string Display()
         {
@@ -27,7 +27,7 @@ class Player : Actor
             Array.Clear(Inventory, 0, Inventory.Length);
             Inventory = temp;
 
-            string txt = "";
+            string txt = "--Your Inventory--\n";
 
             // Checking inventory: 
             for (int i = 0; i < InventorySize; i++)
@@ -36,25 +36,31 @@ class Player : Actor
             }
             return txt;
         }
-        string choice = Utility.Prompt(Display());
-        if (string.IsNullOrWhiteSpace(choice)) { return; }
-        int.TryParse(choice, out int nr);
-        if (nr-1 > Inventory.Length) {Utility.Error("No item selected!"); return; }
-        if (this.Inventory[nr - 1] != null)
+        if (equip)
         {
-            try{Console.Clear();} catch{}
-            Console.WriteLine(this.Inventory[nr - 1]!.Info());
-
-            choice = Utility.Prompt("Equip?(y/n)", clear: false);
+            string choice = Utility.Prompt(Display());
             if (string.IsNullOrWhiteSpace(choice)) { return; }
-            if (choice == "y") { this.EquipItem(this.Inventory[nr - 1]!); }
-            else { return; }
+            int.TryParse(choice, out int nr);
+            if (nr - 1 > Inventory.Length) { Utility.Error("No item selected!"); return; }
+            if (this.Inventory[nr - 1] != null)
+            {
+                try { Console.Clear(); } catch { }
+                Console.WriteLine(this.Inventory[nr - 1]!.Info());
+
+                choice = Utility.Prompt("Equip?(y/n)", clear: false);
+                if (string.IsNullOrWhiteSpace(choice)) { return; }
+                if (choice == "y") { this.EquipItem(this.Inventory[nr - 1]!); }
+                else { return; }
+            }
+            else
+            {
+                Utility.Error("No item selected!");
+            }
         }
         else
         {
-            Utility.Error("No item selected!");
+            Console.WriteLine(Display());
         }
-                    
     }
     public void CheckEquipped()
     {
