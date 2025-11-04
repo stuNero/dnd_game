@@ -68,23 +68,56 @@ class Player : Actor
         }
         if (equip)
         {
-            string choice = Utility.Prompt(Display());
-            if (string.IsNullOrWhiteSpace(choice)) { return; }
-            int.TryParse(choice, out int nr);
-            if (nr - 1 > Inventory.Length) { Utility.Error("No item selected!"); return; }
-            if (this.Inventory[nr - 1] != null)
+            bool running = true;
+            int selectedIndex = 0;
+            
+            while (running)
             {
-                try { Console.Clear(); } catch { }
-                Console.WriteLine(this.Inventory[nr - 1]!.Info());
+                List<string> invOptions = new();
+                foreach (Item? item in Inventory)
+                {
+                    if (item != null)
+                    { invOptions.Add(item.Name);}
+                }
+                if (invOptions.Count == 0) { return;}
+                string[] invOptionsArr = invOptions.ToArray();
 
-                choice = Utility.Prompt("Equip?(y/n)", clear: false);
-                if (string.IsNullOrWhiteSpace(choice)) { return; }
-                if (choice == "y") { this.EquipItem(this.Inventory[nr - 1]!); }
-                else { return; }
-            }
-            else
-            {
-                Utility.Error("No item selected!");
+                Dictionary<string, Item> invDict = new();
+                for (int i = 0; i < invOptionsArr.Length; ++i)
+                {
+                    if (Inventory[i] != null)
+                    {
+                        invDict.Add(Inventory[i]!.Name, Inventory[i]!);
+                    }
+                }
+                Console.Clear();
+                Utility.GenerateMenu("INVENTORY:");
+                Utility.GenerateMenuActions(selectedIndex, invOptionsArr);
+                switch (Console.ReadKey().Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        selectedIndex--;
+                        if (selectedIndex < 0)
+                            selectedIndex = invOptionsArr.Length - 1;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        selectedIndex++;
+                        if (selectedIndex > invOptionsArr.Length-1)
+                            selectedIndex = 0;
+                        break;
+                    case ConsoleKey.Enter:
+                        Debug.Assert(Inventory[selectedIndex] != null);
+                        try { Console.Clear(); } catch { }
+                        Console.WriteLine(this.Inventory[selectedIndex]!.Info());
+
+                        ConsoleKeyInfo key = Utility.PromptKey("Equip?(y/n)", clear: false);
+                        if (key.Key != ConsoleKey.Y) { return; }
+                        else { this.EquipItem(this.Inventory[selectedIndex]!); }
+                        running = false;
+                        break;
+                    case ConsoleKey.Escape:
+                        return;
+                }
             }
         }
         else
