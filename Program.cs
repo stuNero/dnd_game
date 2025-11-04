@@ -137,7 +137,7 @@ while (running)
                         break;
                     case ConsoleKey.DownArrow:
                         selectedIndex++;
-                        if (selectedIndex > mainOptions.Length)
+                        if (selectedIndex > mainOptions.Length-1)
                             selectedIndex = 0;
                         break;
                     case ConsoleKey.Enter:
