@@ -4,10 +4,7 @@
     - each character has a save file
 - Action menu, check chatgpt:
     https://chatgpt.com/share/68ff7cf9-8750-8011-951a-ec360a2dce97
-- fix encoding issues when starting new game
-
-- fix escape in creation menu
-
+- fix encoding issues when starting new game (GIT BASH ISSUE! USE TERMINAL)
 - add Info() to Weapon
     
 
