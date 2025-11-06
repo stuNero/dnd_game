@@ -122,12 +122,13 @@ while (running)
                         break;
                     case ConsoleKey.DownArrow:
                         selectedIndex++;
-                        if (selectedIndex > itemArray.Length -1)
+                        if (selectedIndex >= itemArray.Length)
                             selectedIndex = 0;
                         break;
                     case ConsoleKey.Enter:
                         player1.AddItem(tempItems[selectedIndex]);
                         tempItems.Remove(tempItems[selectedIndex]);
+                        selectedIndex = 0;
                         break;
                     case ConsoleKey.Escape:
                         subRunning = false;
@@ -235,7 +236,7 @@ while (running)
                         break;
                     case ConsoleKey.DownArrow:
                         selectedIndex++;
-                        if (selectedIndex > charOptions.Length)
+                        if (selectedIndex > charOptions.Length - 1)
                             selectedIndex = 0;
                         break;
                     case ConsoleKey.Enter:
@@ -267,7 +268,7 @@ while (running)
                         Console.ReadKey(true);
                         break;
                     case CharMenu.Inventory: player1!.CheckInventory(equip:true); break;
-                    case CharMenu.Equipped: player1!.CheckEquipped(); break;
+                    case CharMenu.Equipped: player1!.CheckEquipped(unequip:true); break;
                     case CharMenu.Stats: Utility.Prompt(player1!.Info()); break;
                     default: break;
                 }
