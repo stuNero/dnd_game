@@ -145,9 +145,39 @@ while (running)
                         currentMenu = menuOptions[mainOptions[selectedIndex]];
                         break;
                     case ConsoleKey.Escape:
-                        string input = Utility.Prompt("Are you sure?(Y/n)");
-                        if (input.ToLower() == "y")  
-                        { currentMenu = Menu.Start; subRunning = false; }
+                        selectedIndex = 0;
+                        string[] yesNo = ["Yes", "No"];
+
+                        while (subRunning)
+                        {
+                            Console.Clear();
+                            Utility.GenerateMenu("You are about to quit and will lose all progress\nAre you sure?");
+                            Utility.GenerateMenuActions(selectedIndex, yesNo);
+                            switch (Console.ReadKey().Key)
+                            {
+                                case ConsoleKey.UpArrow:
+                                    selectedIndex--;
+                                    if (selectedIndex < 0)
+                                        selectedIndex = yesNo.Length - 1;
+                                    break;
+                                case ConsoleKey.DownArrow:
+                                    selectedIndex++;
+                                    if (selectedIndex > yesNo.Length - 1)
+                                        selectedIndex = 0;
+                                    break;
+                                case ConsoleKey.Enter:
+                                    if (yesNo[selectedIndex] == "Yes")
+                                    {
+                                        currentMenu = Menu.Start;
+                                        subRunning = false;
+                                    }
+                                    else if (yesNo[selectedIndex] == "No")
+                                    {
+                                        currentMenu = Menu.Main;
+                                    }
+                                    break;
+                            }
+                        }
                         break;
                 }
             }
