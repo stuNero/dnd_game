@@ -98,7 +98,7 @@ while (running)
                         break;
                     case ConsoleKey.DownArrow:
                         selectedItemIndex++;
-                        if (selectedItemIndex > itemArray.Length)
+                        if (selectedItemIndex > itemArray.Length -1)
                             selectedItemIndex = 0;
                         break;
                     case ConsoleKey.Enter:
@@ -191,30 +191,29 @@ while (running)
                         subRunning = false;
                         break;
                     case ConsoleKey.Escape:
+                        currentMenu = Menu.Main;
                         subRunning = false;
-                        charMenu = CharMenu.None;
-                        break;
+                        continue;
                 }
-                
-            }
-            switch (charMenu)
-            {
-                case CharMenu.TakeDamage:
-                    try { Console.Clear(); } catch { }
-                    if (player1!.Equipped[0] is Weapon w)
-                    { player1!.TakeDamage(w); }
-                    Console.WriteLine(player1.Info());
-                    if (!player1.Alive)
-                    {
-                        Utility.PrintColor("You died!", ConsoleColor.DarkRed);
-                        currentMenu = Menu.Start;
-                    }
-                    Console.ReadKey(true);
-                    break;
-                case CharMenu.Inventory: player1!.CheckInventory(equip:true); break;
-                case CharMenu.Equipped: player1!.CheckEquipped(); break;
-                case CharMenu.Stats: Utility.Prompt(player1!.Info()); break;
-                default: break;
+                switch (charMenu)
+                {
+                    case CharMenu.TakeDamage:
+                        try { Console.Clear(); } catch { }
+                        if (player1!.Equipped[0] is Weapon w)
+                        { player1!.TakeDamage(w); }
+                        Console.WriteLine(player1.Info());
+                        if (!player1.Alive)
+                        {
+                            Utility.PrintColor("You died!", ConsoleColor.DarkRed);
+                            currentMenu = Menu.Start;
+                        }
+                        Console.ReadKey(true);
+                        break;
+                    case CharMenu.Inventory: player1!.CheckInventory(equip:true); break;
+                    case CharMenu.Equipped: player1!.CheckEquipped(); break;
+                    case CharMenu.Stats: Utility.Prompt(player1!.Info()); break;
+                    default: break;
+                }
             }
             break;
         case Menu.Quit:
