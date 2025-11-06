@@ -4,19 +4,20 @@ using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using Game;
 
-
 Player? player1 = null;
 Enemy? goblin1 = null;
 List<Item> items = new();
+Menu currentMenu = Menu.Start;
+bool running = true;
+bool narration = true;
+int selectedIndex = 0;
+
 items.Add(new Weapon("Longsword", 2, WeaponType.Sword));
 items.Add(new Weapon("Bearded Axe", 2, WeaponType.Axe));
 items.Add(new Weapon("Quillon Dagger", 2, WeaponType.Dagger));
 items.Add(new Weapon("Flanged Mace", 2, WeaponType.Mace));
 items.Add(new Consumable("Health Potion", 2));
 
-Menu currentMenu = Menu.Start;
-bool running = true;
-bool narration = true;
 while (running)
 {
     try{Console.Clear();} catch{}
@@ -25,11 +26,10 @@ while (running)
     {
         case Menu.Start:
             subRunning = true;
-            ConsoleKeyInfo keyInput;
             goblin1 = new Enemy(name: "Goblin Soldier", maxHP: 5.0, mp: 5, dmg: 1, xp: 100, lvl: 1, 3, "Goblin");
             string[] startOptions = ["START", "QUIT"];
 
-            int selectedIndex1 = 0;
+            selectedIndex = 0;
             Dictionary<string, Menu> startMenuOptions = new Dictionary<string, Menu>();
             startMenuOptions.Add(startOptions[0], Menu.Creation);
             startMenuOptions.Add(startOptions[1], Menu.Quit);
@@ -38,22 +38,22 @@ while (running)
             {
                 try {Console.Clear();} catch{}
                 Utility.GenerateMenu(title:"D U N G E O N  C R A W L E R");
-                Utility.GenerateMenuActions(selectedIndex1, startOptions);
+                Utility.GenerateMenuActions(selectedIndex, startOptions, previousMenu:false);
                 switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.UpArrow:
-                        selectedIndex1--;
-                        if (selectedIndex1 < 0)
-                            selectedIndex1 = startOptions.Length - 1;
+                        selectedIndex--;
+                        if (selectedIndex < 0)
+                            selectedIndex = startOptions.Length - 1;
                         break;
                     case ConsoleKey.DownArrow:
-                        selectedIndex1++;
-                        if (selectedIndex1 >= startOptions.Length)
-                            selectedIndex1 = 0;
+                        selectedIndex++;
+                        if (selectedIndex >= startOptions.Length)
+                            selectedIndex = 0;
                         break;
                     case ConsoleKey.Enter:
                         Console.Clear();
-                        currentMenu = startMenuOptions[startOptions[selectedIndex1]];
+                        currentMenu = startMenuOptions[startOptions[selectedIndex]];
                         subRunning = false;
                         break;
                 }
@@ -65,18 +65,42 @@ while (running)
             List<Item> tempItems = new();
             foreach (Item item1 in items) { tempItems.Add(item1); }
 
-            keyInput = Utility.PromptKey("Skip narration?\n(Y/n)");
-            if (keyInput.Key == ConsoleKey.Enter) { break; }
-            else if (keyInput.Key == ConsoleKey.Y) { narration = false; }
-            
+            selectedIndex = 0;
+            string[] yesNo= ["Yes", "No"];
+            while (subRunning)
+            {
+                Console.Clear();
+                Utility.GenerateMenu("Skip narration?");
+                Utility.GenerateMenuActions(selectedIndex, yesNo);
+                switch (Console.ReadKey().Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        selectedIndex--;
+                        if (selectedIndex < 0)
+                            selectedIndex = yesNo.Length - 1;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        selectedIndex++;
+                        if (selectedIndex > yesNo.Length - 1)
+                            selectedIndex = 0;
+                        break;
+                    case ConsoleKey.Enter:
+                        if (yesNo[selectedIndex] == "Yes")
+                        { narration = false; subRunning = false;}
+                        else if (yesNo[selectedIndex] == "No") { subRunning = false; }
+                        break;
+                }
+            }
             if (narration)
             {
+                Console.Clear();
                 Utility.Narrate(text: "The hinges of the door creaks and you enter the room,\nyour torch light slowly " +
                 "illuminates an unlocked rusty, matte padlock..\n");
                 Utility.Narrate(text: "As you step closer you make out the outlines of an\n" +
                 "old oak chest which materializes from the black, seemingly infinite void room. ");
             }
-            int selectedItemIndex = 0;
+            subRunning = true;
+            selectedIndex = 0;
             while (player1.InventoryRange() < 3 && subRunning)
             {
                 List<string> itemList = new();
@@ -87,23 +111,23 @@ while (running)
                 string[] itemArray = itemList.ToArray();
                 try { Console.Clear(); } catch { }
                 Utility.GenerateMenu(title: $"\nChoose Your Starting Items ({3 - player1.InventoryRange()})");
-                Utility.GenerateMenuActions(selectedItemIndex, itemArray);
+                Utility.GenerateMenuActions(selectedIndex, itemArray);
                 player1.CheckInventory();
                 switch (Console.ReadKey().Key)
                 {
                     case ConsoleKey.UpArrow:
-                        selectedItemIndex--;
-                        if (selectedItemIndex < 0)
-                            selectedItemIndex = itemArray.Length - 1;
+                        selectedIndex--;
+                        if (selectedIndex < 0)
+                            selectedIndex = itemArray.Length - 1;
                         break;
                     case ConsoleKey.DownArrow:
-                        selectedItemIndex++;
-                        if (selectedItemIndex > itemArray.Length -1)
-                            selectedItemIndex = 0;
+                        selectedIndex++;
+                        if (selectedIndex > itemArray.Length -1)
+                            selectedIndex = 0;
                         break;
                     case ConsoleKey.Enter:
-                        player1.AddItem(tempItems[selectedItemIndex]);
-                        tempItems.Remove(tempItems[selectedItemIndex]);
+                        player1.AddItem(tempItems[selectedIndex]);
+                        tempItems.Remove(tempItems[selectedIndex]);
                         break;
                     case ConsoleKey.Escape:
                         subRunning = false;
@@ -118,7 +142,7 @@ while (running)
             break;
         case Menu.Main:
             subRunning = true;
-            int selectedIndex = 0;
+            selectedIndex = 0;
             string[] mainOptions = ["Attack enemy WIP", "Character"];
             Dictionary<string, Menu> menuOptions = new Dictionary<string, Menu>();
             menuOptions.Add(mainOptions[0], Menu.Battle);
@@ -146,12 +170,12 @@ while (running)
                         break;
                     case ConsoleKey.Escape:
                         selectedIndex = 0;
-                        string[] yesNo = ["Yes", "No"];
+                        yesNo = ["Yes", "No"];
 
                         while (subRunning)
                         {
                             Console.Clear();
-                            Utility.GenerateMenu("You are about to quit and will lose all progress\nAre you sure?");
+                            Utility.GenerateMenu("You are about to quit and will lose all progress!\nAre you sure?");
                             Utility.GenerateMenuActions(selectedIndex, yesNo);
                             switch (Console.ReadKey().Key)
                             {
@@ -172,9 +196,7 @@ while (running)
                                         subRunning = false;
                                     }
                                     else if (yesNo[selectedIndex] == "No")
-                                    {
-                                        currentMenu = Menu.Main;
-                                    }
+                                    { currentMenu = Menu.Main;}
                                     break;
                             }
                         }
@@ -230,11 +252,16 @@ while (running)
                     case CharMenu.TakeDamage:
                         try { Console.Clear(); } catch { }
                         if (player1!.Equipped[0] is Weapon w)
-                        { player1!.TakeDamage(w); }
+                        {
+                            #pragma warning disable CA1416 // Suppress: Console.Beep is only supported on Windows
+                            player1!.TakeDamage(w); 
+                            Console.Beep(700, 400);
+                            }
                         Console.WriteLine(player1.Info());
                         if (!player1.Alive)
                         {
                             Utility.PrintColor("You died!", ConsoleColor.DarkRed);
+                            Console.Beep(100,1600);
                             currentMenu = Menu.Start;
                         }
                         Console.ReadKey(true);
@@ -247,8 +274,34 @@ while (running)
             }
             break;
         case Menu.Quit:
-            keyInput = Utility.PromptKey("Are you sure?");
-            if (keyInput.Key == ConsoleKey.Enter) { break; }else if (keyInput.Key == ConsoleKey.Y){ Environment.Exit(0); }
+            selectedIndex = 0;
+            running = true;
+            yesNo = ["Yes", "No"];
+            while (running)
+            {
+                Console.Clear();
+                Utility.GenerateMenu("You are about to quit the program.\nAre you sure?");
+                Utility.GenerateMenuActions(selectedIndex, yesNo,previousMenu:false);
+                switch (Console.ReadKey().Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        selectedIndex--;
+                        if (selectedIndex < 0)
+                            selectedIndex = yesNo.Length - 1;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        selectedIndex++;
+                        if (selectedIndex > yesNo.Length - 1)
+                            selectedIndex = 0;
+                        break;
+                    case ConsoleKey.Enter:
+                        if (yesNo[selectedIndex] == "Yes")
+                        { running = false; }
+                        else if (yesNo[selectedIndex] == "No")
+                        { currentMenu = Menu.Start; running = false; }
+                        break;
+                }
+            }   
             break;
         default: break;
     }
