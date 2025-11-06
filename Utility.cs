@@ -122,9 +122,9 @@ abstract class Utility
             try { Console.Clear(); } catch { }
         }
     }
-    public static void GenerateMenuActions(int selectedIndex, string[] menuOptions)
+    public static void GenerateMenuActions(int selectedIndex, string[] menuOptions, bool previousMenu = true)
     {
-        for (int i = 0; i<menuOptions.Length; ++i)
+        for (int i = 0; i < menuOptions.Length; ++i)
         {
             if (i == selectedIndex)
             {
@@ -139,8 +139,11 @@ abstract class Utility
                 Console.ResetColor();
             }
         }
-        Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.WriteLine("\n(Press 'ESC' to return to previous menu..)");
-        Console.ResetColor();
+        if (previousMenu)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine("\n(Press 'ESC' to return to previous menu..)");
+            Console.ResetColor();
+        }
     }
 }
