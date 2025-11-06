@@ -39,7 +39,7 @@ while (running)
                 try {Console.Clear();} catch{}
                 Utility.GenerateMenu(title:"D U N G E O N  C R A W L E R");
                 Utility.GenerateMenuActions(selectedIndex1, startOptions);
-                switch (Console.ReadKey().Key)
+                switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.UpArrow:
                         selectedIndex1--;
@@ -128,7 +128,7 @@ while (running)
                 try {Console.Clear();} catch{}
                 Utility.GenerateMenu(title: "MAIN MENU");
                 Utility.GenerateMenuActions(selectedIndex, mainOptions);
-                switch (Console.ReadKey().Key)
+                switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.UpArrow:
                         selectedIndex--;
@@ -174,7 +174,7 @@ while (running)
                 Console.Clear(); 
                 Utility.GenerateMenu("CHARACTER MENU");
                 Utility.GenerateMenuActions(selectedIndex, charOptions);
-                switch (Console.ReadKey().Key)
+                switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.UpArrow:
                         selectedIndex--;
