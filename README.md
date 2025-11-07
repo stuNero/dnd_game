@@ -1,4 +1,4 @@
-# 🎮 [ D U N G E O N  C R A W L E R ]
+# 🎮 [ D U N G E O N - - C R A W L E R ]
 
 > A text-based fantasy adventure where you battle enemies, collect loot, and make choices that shape your journey.
 
@@ -9,6 +9,10 @@
 - Character creation and stats  
 - Inventory and equipment management  
 - Console-based UI with menus  
+
+## Notes
+- In git bash the text is sometimes decoded incorrectly
+and menus work incorrectly, please use PowerShell or terminal
 
 ## Controls
 - ↑ / ↓     Menu navigation
