@@ -18,6 +18,15 @@
 ## Gameplay Overview
 
 ## Future Plans
+- Map based exploration
+    - Grid based maps
+        - Room based
+    - With loot in chests/urns/containers
+    - With randomly generated enemies
+- Quests
+- Traders/trades
+- Basic Combat
+- Leveling system
 
 ---
 
