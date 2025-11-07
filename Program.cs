@@ -197,7 +197,7 @@ while (running)
                                         subRunning = false;
                                     }
                                     else if (yesNo[selectedIndex] == "No")
-                                    { currentMenu = Menu.Main;}
+                                    { currentMenu = Menu.Main; subRunning = false; }
                                     break;
                             }
                         }
