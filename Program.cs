@@ -111,7 +111,7 @@ while (running)
                 string[] itemArray = itemList.ToArray();
                 try { Console.Clear(); } catch { }
                 Utility.GenerateMenu(title: $"\nChoose Your Starting Items ({3 - player1.InventoryRange()})");
-                Utility.GenerateMenuActions(selectedIndex, itemArray);
+                Utility.GenerateMenuActions(selectedIndex, itemArray, menuColor: ConsoleColor.DarkMagenta);
                 player1.CheckInventory();
                 switch (Console.ReadKey().Key)
                 {
