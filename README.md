@@ -26,7 +26,8 @@
 ### Prerequisites
 - [.NET SDK](https://dotnet.microsoft.com/download) (version X.X or later)
 - A terminal (e.g., Command Prompt, PowerShell, or Git Bash)
-- Optimized for windows, some features may be absent or unsupported on other OS
+- Optimized for windows, some features may be absent or unsupported on other OS 
+  *(planned to support more in the future)*
 
 
 ### Steps

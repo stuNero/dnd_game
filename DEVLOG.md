@@ -1,12 +1,5 @@
 # TODO
-- Fully implement basic combat
-- Save to file
-    - each character has a save file
-- Action menu, check chatgpt:
-    https://chatgpt.com/share/68ff7cf9-8750-8011-951a-ec360a2dce97
-- fix encoding issues when starting new game (GIT BASH ISSUE! USE TERMINAL)
-- add Info() to Weapon
-    
+- *fix text encoding issues when starting new game (GIT BASH ISSUE! USE TERMINAL)*
 
 # Save Slot System — Design Summary
  ## Overview
