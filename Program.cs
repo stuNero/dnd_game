@@ -38,7 +38,10 @@ while (running)
             {
                 try {Console.Clear();} catch{}
                 Utility.GenerateMenu(title:"D U N G E O N  C R A W L E R");
-                Utility.GenerateMenuActions(selectedIndex, startOptions, previousMenu:false);
+                Utility.GenerateMenuActions(selectedIndex, startOptions, previousMenu: false);
+                Utility.PrintColor("\n\n\nCONTROLS: \nNavigate:  [^] [v]"+
+                                                   "\nSelection: [ENTER]"+
+                                                   "\nCancel:    [ESC]",ConsoleColor.DarkGray);
                 switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.UpArrow:
@@ -137,7 +140,8 @@ while (running)
             }
             Console.Clear();
             player1.CheckInventory();
-            Utility.PromptKey("Press ANY KEY to continue..", clear:false);
+            Utility.PrintColor("Press Any Key to continue", ConsoleColor.DarkGray);
+            Console.ReadKey(true);
             currentMenu = Menu.Main;
             if (narration) Utility.Narrate("You delve into the depths of the dungeon...");
             break;
