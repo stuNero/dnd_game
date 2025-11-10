@@ -265,26 +265,8 @@ class Player : Actor
         else
         {
             Console.WriteLine(Display());
-            Utility.PromptKey("",clear:false);
+            Utility.PromptKey(clear:false);
         }
-        // string choice = Utility.Prompt(Display());
-        // if (string.IsNullOrWhiteSpace(choice)) { return; }
-        // int.TryParse(choice, out int nr);
-        // if (nr-1 > Equipped.Length) {Utility.Error("No item selected!"); return; }
-        // if (this.Equipped[nr - 1] != null)
-        // {
-        //     try{Console.Clear();} catch{}
-        //     Console.WriteLine(this.Equipped[nr - 1]!.Info());
-
-        //     choice = Utility.Prompt("Unequip?(y/n)", clear: false);
-        //     if (string.IsNullOrWhiteSpace(choice)) { return; }
-        //     if (choice == "y") { this.UnEquipItem(this.Equipped[nr - 1]!); }
-        //     else { return; }
-        // }
-        // else
-        // {
-        //     Utility.Error("No item selected!");
-        // } 
     }
     /// <summary>
     /// Unequips <paramref name="item"/> if it is currently equipped.

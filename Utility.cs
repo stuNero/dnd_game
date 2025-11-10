@@ -47,25 +47,11 @@ abstract class Utility
         if (clear)
         { try { Console.Clear(); } catch { } }
         Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.WriteLine("\n(Empty line and 'ENTER' to cancel..)");
+        Console.WriteLine("\nPress [ESC] to cancel...");
         Console.ForegroundColor = ConsoleColor.DarkYellow;
         Console.Write(input);
         Console.ResetColor();
         return Console.ReadKey()!;
-    }
-    /// <summary>
-    /// Prints a colored Error message and an option to return to menu
-    /// </summary>
-    /// <param name="msg">Specific Error message</param>
-    public static void Error(string msg)
-    {
-        Console.ForegroundColor = ConsoleColor.DarkRed;
-        Console.WriteLine(msg);
-        Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.Write("'ENTER' to return to menu...");
-        Console.ResetColor();
-        Console.ReadKey(true);
-        try { Console.Clear(); } catch { }
     }
     /// <summary>
     /// Prints a colored Success message with a bool option for returning to menu
