@@ -107,7 +107,7 @@ class Player : Actor
                             selectedItemIndex = 0;
                         break;
                     case ConsoleKey.Enter:
-                        Debug.Assert(Inventory[selectedItemIndex] != null); // CHECK THIS, FAILS ON EQUIP OVER OTHER ITEM
+                        Debug.Assert(Inventory[selectedItemIndex] != null); 
                         try { Console.Clear(); } catch { }
                         Console.WriteLine(this.Inventory[selectedItemIndex]!.Info());
 

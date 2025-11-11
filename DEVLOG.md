@@ -1,6 +1,5 @@
 # TODO
 
-
 # Save Slot System — Design Summary
  ## Overview
     A practical guide to implementing a save slot system for a console-based RPG. This summary outlines
