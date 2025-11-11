@@ -95,20 +95,38 @@ abstract class Entity
             }
         }
     }
-    public virtual void TakeDamage(Weapon weapon)
+    public virtual void TakeDamage(Entity enemy)
     {
-        bool crit = false;
-        double dmg = weapon.Value;
-        crit = weapon.CritCheck();
-        double critDamage = 0;
-        if (crit)
+        double dmg = 0;
+        Item? weapon = null;
+        if (enemy is Player p)
         {
-            critDamage = weapon.Crit();
-            Utility.PrintColor(weapon.Name + " crit for " + (critDamage - dmg) + " damage!", ConsoleColor.DarkRed);
-            dmg = critDamage;
+            dmg = p.Dmg;
+            weapon = p.Equipped[0];
         }
-        if (this is Player) {Utility.PrintColor("You took " + dmg + " damage!", ConsoleColor.DarkRed);}
-        else { Utility.PrintColor(this.Name + " took " + dmg + " damage!", ConsoleColor.DarkGreen);}
+        else if (enemy is Enemy e)
+        {
+            dmg = e.Dmg;
+            weapon = e.Inventory[0];
+        }
+        if (weapon != null)
+        {
+            if (weapon is Weapon w)
+            {
+                bool crit = false;
+                dmg = w.Value;
+                crit = w.CritCheck();
+                double critDamage = 0;
+                if (crit)
+                {
+                    critDamage = w.Crit();
+                    Utility.PrintColor(w.Name + " crit for " + (critDamage - dmg) + " damage!", ConsoleColor.DarkRed);
+                    dmg = critDamage;
+                }
+            }
+        }
+        if (this is Player) { Utility.PrintColor("You took " + dmg + " damage!", ConsoleColor.DarkRed); }
+        else { Utility.PrintColor(this.Name + " took " + dmg + " damage!", ConsoleColor.DarkGreen); }
         this.Hp -= dmg;
         if (this.Hp <= 0) {this.Alive = false;}
     }
