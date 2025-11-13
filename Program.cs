@@ -120,7 +120,7 @@ while (running)
                         {
                             Console.Clear();
                             Utility.GenerateMenu("Are you sure?");
-                            Utility.PrintColor(playChars[selectedCharIndex].Info(), ConsoleColor.Gray);
+                            Utility.PrintColor(playChars[selectedCharIndex].Info(), ConsoleColor.DarkCyan);
                             Utility.GenerateMenuActions(selectedIndex, yesNo);
                             switch(Console.ReadKey().Key)
                             {
@@ -324,7 +324,7 @@ while (running)
                         player!.TakeDamage(player);
                         Console.Beep(700, 400);
                         
-                        Console.WriteLine(player.Info());
+                        Utility.PrintColor(player.Info(),ConsoleColor.DarkCyan);
                         if (!player.Alive)
                         {
                             Utility.PrintColor("You died!", ConsoleColor.DarkRed);
@@ -335,7 +335,12 @@ while (running)
                         break;
                     case CharMenu.Inventory: player!.CheckInventory(equip: true); break;
                     case CharMenu.Equipped: player!.CheckEquipped(unequip: true); break;
-                    case CharMenu.Stats: Utility.Prompt(player!.Info()); break;
+                    case CharMenu.Stats: 
+                        Console.Clear();
+                        Utility.PrintColor(player!.Info(), ConsoleColor.DarkCyan); 
+                        Utility.PrintColor("Press Any Key to continue", ConsoleColor.DarkGray);
+                        Console.ReadKey(true);
+                        break;
                     default: break;
                 }
             }
