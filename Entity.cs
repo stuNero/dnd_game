@@ -113,6 +113,7 @@ abstract class Entity
         else { Utility.PrintColor("\n" + this.Name + " took " + dmg + " damage!", ConsoleColor.DarkGreen); }
         this.Hp -= dmg;
         if (this.Hp <= 0) { this.Alive = false; }
+        Utility.PrintColor("\nPress Any Key to continue", ConsoleColor.DarkGray);
         Console.ReadKey(true);
     }
     public virtual void TakeTurn(Entity opponent)
