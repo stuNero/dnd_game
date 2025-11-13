@@ -1,3 +1,4 @@
+---
 name: Bug Report
 description: File a report to help us improve
 labels: bug
