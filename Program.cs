@@ -4,8 +4,8 @@ using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using Game;
 
-Player? player = null;
-Enemy? goblin1 = null;
+Player? player = null; 
+Enemy? goblin1 = null; 
 Menu currentMenu = Menu.Start;
 bool running = true;
 bool narration = true;
@@ -26,7 +26,7 @@ while (running)
     {
         case Menu.Start:
             subRunning = true;
-            goblin1 = new Enemy(name: "Goblin Soldier", maxHP: 5.0, mp: 5, dmg: 1, xp: 100, lvl: 1, 3, "Goblin");
+            goblin1 = new Enemy(name: "Goblin Soldier", maxHP: 10.0, mp: 5, dmg: 1, xp: 100, lvl: 1, 3, "Goblin");
             string[] startOptions = ["START", "QUIT"];
 
             selectedIndex = 0;
@@ -63,24 +63,10 @@ while (running)
             }
             break;
         case Menu.Creation:
-            Utility.PrintColor(
-         "         ,&@@@@@&             " +
-         "     .@@@@@@@@@@@@@@@         " +
-         "    @@@@@@@@@@@@@@@@@@@       " +
-         "   &@@@@@@@@@@@@@@@@@@@#      " +
-         "  @@@@@@@@@@@@@@@@@@@@@@@     " +
-         "   @.      @@@@@      &@      " +
-         "   @@@@@@        ,@@@@@@      " +
-         "   @@@@@@@@*   &@@@@@@@@      " +
-         "   @@@@@@@@*   &@@@@@@@@      " +
-         "   @@@@@@@@*   &@@@@@@@@      " +
-         "   &@@@@@@@*   &@@@@@@@%      " +
-         "        #@@*   &@@/           ",ConsoleColor.Gray);
             subRunning = true;
-            Player char1 = new Player(name: "Knight",    maxHP: 25.0, mp: 10, dmg: 1.0, xp: 100, lvl: 1, inventorySize: 4);
-            player = char1;
-            Player char2 = new Player(name: "Rogue",     maxHP: 10.0, mp: 15, dmg: 2.0, xp: 100, lvl: 1, inventorySize: 6);
-            Player char3 = new Player(name: "Barbarian", maxHP: 15.0, mp: 8,  dmg: 1.5, xp: 100, lvl: 1, inventorySize: 5);
+            Player char1 = new Player(name: "Knight", maxHP: 25.0, mp: 10, dmg: 1.0, xp: 100, lvl: 1, inventorySize: 4);
+            Player char2 = new Player(name: "Rogue", maxHP: 10.0, mp: 15, dmg: 2.0, xp: 100, lvl: 1, inventorySize: 6);
+            Player char3 = new Player(name: "Barbarian", maxHP: 15.0, mp: 8, dmg: 1.5, xp: 100, lvl: 1, inventorySize: 5);
             string[] yesNo = ["Yes", "No"];
             while (subRunning)
             {
@@ -145,7 +131,7 @@ while (running)
                                     break;
                                 case ConsoleKey.DownArrow:
                                     selectedIndex++;
-                                    if (selectedIndex > playChars.Length - 1)
+                                    if (selectedIndex >= playChars.Length - 1)
                                         selectedIndex = 0;
                                     break;
                                 case ConsoleKey.Enter:
@@ -155,15 +141,13 @@ while (running)
                                         boolYesNo = false;
                                         subRunning = false;
                                     }
-                                    else if (yesNo[selectedIndex] == "No") {boolYesNo = false;}
+                                    else if (yesNo[selectedIndex] == "No") { boolYesNo = false; }
                                     break;
                             }
                         }
                         break;
                 }
             }
-
-
             if (narration)
             {
                 Console.Clear();
@@ -177,7 +161,7 @@ while (running)
             selectedIndex = 0;
             subRunning = true;
             selectedIndex = 0;
-            while (player.InventoryRange() < 3 && subRunning)
+            while (player!.InventoryRange() < 3 && subRunning)
             {
                 List<string> itemList = new();
                 // Print available items
@@ -186,19 +170,6 @@ while (running)
 
                 string[] itemArray = itemList.ToArray();
                 try { Console.Clear(); } catch { }
-                Utility.PrintColor(
-                "         ,&@@@@@&             \n" +
-                "     .@@@@@@@@@@@@@@@         \n" +
-                "    @@@@@@@@@@@@@@@@@@@       \n" +
-                "   &@@@@@@@@@@@@@@@@@@@#      \n" +
-                "  @@@@@@@@@@@@@@@@@@@@@@@     \n" +
-                "   @.      @@@@@      &@      \n" +
-                "   @@@@@@        ,@@@@@@      \n" +
-                "   @@@@@@@@*   &@@@@@@@@      \n" +
-                "   @@@@@@@@*   &@@@@@@@@      \n" +
-                "   @@@@@@@@*   &@@@@@@@@      \n" +
-                "   &@@@@@@@*   &@@@@@@@%      \n" +
-                "        #@@*   &@@/           \n",ConsoleColor.DarkGray);
                 Utility.GenerateMenu(title: $"\nChoose Your Starting Items ({3 - player.InventoryRange()})");
                 Utility.GenerateMenuActions(selectedIndex, itemArray, menuColor: ConsoleColor.DarkMagenta);
                 Utility.PrintColor("Press [ESC] to quit choosing", ConsoleColor.DarkGray);
@@ -224,6 +195,10 @@ while (running)
                         break;
                 }
             }
+            foreach (Item item in tempItems)
+            {
+                goblin1!.AddItem(item);
+            }
             Console.Clear();
             player.CheckInventory();
             Utility.PrintColor("Press Any Key to continue", ConsoleColor.DarkGray);
@@ -243,7 +218,7 @@ while (running)
                 try { Console.Clear(); } catch { }
                 Utility.GenerateMenu(title: "MAIN MENU\nPLaying as " + player!.Name);
                 Utility.GenerateMenuActions(selectedIndex, mainOptions);
-                Utility.PrintColor("\n[ESC] - Back To Previous Menu",ConsoleColor.DarkGray);
+                Utility.PrintColor("\n[ESC] - Back To Previous Menu", ConsoleColor.DarkGray);
                 switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.UpArrow:
@@ -297,8 +272,9 @@ while (running)
             }
             break;
         case Menu.Battle:
-            Console.WriteLine("W I P");
-            Console.ReadKey(true);
+            Debug.Assert(player != null);
+            Debug.Assert(goblin1 != null);
+            BattleSystem battle = new(player, goblin1);
             currentMenu = Menu.Main;
             break;
         case Menu.Character:
@@ -318,7 +294,7 @@ while (running)
                 Console.Clear();
                 Utility.GenerateMenu("CHARACTER MENU");
                 Utility.GenerateMenuActions(selectedIndex, charOptions);
-                Utility.PrintColor("\n[ESC] - Back To Previous Menu",ConsoleColor.DarkGray);
+                Utility.PrintColor("\n[ESC] - Back To Previous Menu", ConsoleColor.DarkGray);
                 switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.UpArrow:
