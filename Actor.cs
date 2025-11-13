@@ -20,16 +20,13 @@ abstract class Actor : Entity
         XpDrop = Xp / 100;
         Lvl = lvl;
     }
-    public string Info()
+    public override string Info()
     {
-        string txt = "___________________\n";
 
-        txt += $"Name: [{Name}]\n"
-             + $"LVL:  [{Lvl}]\n"
-             + $"HP:   [{Hp}]\n"
-             + $"MP:   [{Mp}]\n"
-             + $"DMG:  [{Dmg}]\n";
+        string txt = $"LVL:  [{Lvl}]\n"
+                   + $"MP:   [{Mp}]\n"
+                   + $"DMG:  [{Dmg}]\n";
         txt += "___________________";
-        return txt;
+        return base.Info() + txt;
     }
 }
