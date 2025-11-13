@@ -36,37 +36,9 @@ class Player : Actor
     /// attempt to equip it.
     /// </summary>
     /// <param name="equip">If <c>true</c>, allow selecting and equipping an item; otherwise only display inventory.</param>
-    public void CheckInventory(bool equip = false)
+    public override void CheckInventory(bool equip = false)
     {
-        string SortnDisplay()
-        {
-            // Puts all items to beginning of array
-            Item[] temp = new Item[InventorySize];
-            foreach (Item? item in Inventory)
-            {
-                for (int i = 0; i < temp.Length; i++)
-                {
-                    if (temp[i] == null)
-                    {
-                        if (item != null)
-                        { temp[i] = item; }
-                        break;
-                    }
-                }
-            }
-            Array.Clear(Inventory, 0, Inventory.Length);
-            Inventory = temp;
-
-            string txt = "--Your Inventory--\n";
-
-            // Checking inventory: 
-            for (int i = 0; i < InventorySize; i++)
-            {
-                txt += $"[{i + 1}] [{Inventory.ElementAtOrDefault(i)?.Name ?? "Empty Slot"}]\n";
-            }
-            return txt;
-        }
-        SortnDisplay();
+        base.SortInventory();
         if (equip)
         {
             bool running = true;
@@ -151,7 +123,7 @@ class Player : Actor
         }
         else
         {
-            Console.WriteLine(SortnDisplay());
+            base.CheckInventory();
         }
     }
     public void CheckEquipped(bool unequip = false)
@@ -160,7 +132,7 @@ class Player : Actor
         /// Displays the currently equipped items and allows the user to
         /// select a slot to view details and optionally unequip the item.
         /// </summary>
-        
+
         string Display()
         {
             string txt = "";
@@ -266,7 +238,47 @@ class Player : Actor
         else
         {
             Console.WriteLine(Display());
-            Utility.PromptKey(clear:false);
+            Utility.PromptKey(clear: false);
+        }
+    }
+    public override void Loot(Entity victim)
+    {
+        List<Item> tempItems = new();
+        foreach (Item? item in victim.Inventory) { tempItems.Add(item!); }
+        int selectedItemIndex = 0;
+        bool subRunning = true;
+        while (victim.InInventoryRange(InventoryRange()) && subRunning)
+        {
+            Console.Clear();
+            List<string> itemList = new();
+            foreach (Item? item in tempItems)
+            { if (item != null){itemList.Add("\n" + item!.Name);} }
+
+            string[] itemArray = itemList.ToArray();
+            Utility.GenerateMenu(victim.Name + "s Inventory:");
+            Utility.GenerateMenuActions(selectedItemIndex, itemArray);
+            Utility.PrintColor("[ESC] - Stop looting",ConsoleColor.DarkGray);
+            switch (Console.ReadKey().Key)
+            {
+                case ConsoleKey.UpArrow:
+                    selectedItemIndex--;
+                    if (selectedItemIndex < 0)
+                        selectedItemIndex = itemArray.Length - 1;
+                    break;
+                case ConsoleKey.DownArrow:
+                    selectedItemIndex++;
+                    if (selectedItemIndex >= itemArray.Length)
+                        selectedItemIndex = 0;
+                    break;
+                case ConsoleKey.Enter:
+                    this.AddItem(tempItems[selectedItemIndex]);
+                    tempItems.Remove(tempItems[selectedItemIndex]);
+                    selectedItemIndex = 0;
+                    break;
+                case ConsoleKey.Escape:
+                    subRunning = false;
+                    return;
+            }
         }
     }
     /// <summary>
