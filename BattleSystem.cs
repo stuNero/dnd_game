@@ -49,7 +49,7 @@ class BattleSystem
                 Console.Clear();
                 Utility.GenerateMenu(killed.Name + "'s body is lifeless on the floor.");
                 Utility.GenerateMenuActions(selectedIndex, yesNo);
-                switch (Console.ReadKey().Key)
+                switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.UpArrow:
                         selectedIndex--;

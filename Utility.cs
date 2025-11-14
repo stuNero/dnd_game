@@ -51,10 +51,17 @@ abstract class Utility
         Console.ResetColor();
         try { Console.Clear(); } catch { }
     }
-    public static void PrintColor(string msg, ConsoleColor consoleColor)
+    public static void PrintColor(string msg, ConsoleColor consoleColor, bool NoLineWrite = false)
     {
         Console.ForegroundColor = consoleColor;
-        Console.WriteLine(msg);
+        if (NoLineWrite)
+        {
+            Console.Write(msg);
+        }
+        else
+        {
+            Console.WriteLine(msg);
+        }
         Console.ResetColor();
     }
     public static void Narrate(string text, ConsoleColor color = ConsoleColor.DarkYellow, bool slow = true, int charDelayMs = 30, bool waitForKey = true)
