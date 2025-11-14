@@ -197,8 +197,10 @@ while (running)
             }
             foreach (Item item in tempItems)
             {
+                if (item == null) continue;
                 goblin1!.AddItem(item);
             }
+
             Console.Clear();
             Utility.GenerateMenu("Your Inventory");
             player.CheckInventory();
@@ -275,7 +277,10 @@ while (running)
         case Menu.Battle:
             Debug.Assert(player != null);
             Debug.Assert(goblin1 != null);
+
             BattleSystem battle = new(player, goblin1);
+            currentMenu = battle.BattleLoop();
+
             currentMenu = Menu.Main;
             break;
         case Menu.Character:
